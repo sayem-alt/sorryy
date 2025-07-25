@@ -128,9 +128,6 @@
   #confettiCanvas{
     position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;
   }
-  iframe{
-    position:fixed;bottom:-100%;left:-100%;width:1px;height:1px;opacity:0;
-  }
 </style>
 </head>
 <body>
@@ -148,7 +145,13 @@
       — Pr Pr Patapim
     </p>
     <div style="display:flex; gap:12px; margin-top:18px; flex-wrap:wrap; justify-content:center;">
-      <button class="btn" id="playSongBtn">🎵 Play our song</button>
+      <select id="songSelector" class="btn outline">
+        <option value="song.mp3">Song 1</option>
+        <option value="song2.mp3">Song 2</option>
+        <option value="song3.mp3">Song 3</option>
+        <option value="song4.mp3">Song 4</option>
+      </select>
+      <button class="btn" id="playSongBtn">🎵 Play Selected Song</button>
       <button class="btn outline" id="openModalBtn">💌 Reveal my heart</button>
     </div>
   </header>
@@ -189,8 +192,8 @@
     </section>
   </main>
 
-  <!-- Your MP3 file -->
-  <audio id="bgAudio" src="song.mp3" preload="auto" loop></audio>
+  <!-- Audio -->
+  <audio id="bgAudio" preload="auto" loop></audio>
 
   <!-- Background hearts -->
   <div class="hearts" id="hearts"></div>
@@ -329,9 +332,16 @@
     unlockMsg.textContent = "Thank you… I love you. ❤️";
   });
 
-  // Music
+  // Music with Selector
   const playBtn = document.getElementById('playSongBtn');
   const bgAudio = document.getElementById('bgAudio');
+  const songSelector = document.getElementById('songSelector');
+  bgAudio.src = songSelector.value;
+  songSelector.addEventListener('change', () => {
+    bgAudio.pause();
+    bgAudio.src = songSelector.value;
+    bgAudio.load();
+  });
   playBtn.addEventListener('click', async ()=>{
     try { await bgAudio.play(); }
     catch(err) { console.log("Music play blocked", err); }
